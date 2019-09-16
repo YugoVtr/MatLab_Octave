@@ -1,48 +1,49 @@
-image = imread('einstein.png');
+% Example to Call function 
+%   [a,b] = equalization('einstein.png', 1)
+function [image, new_image] = equalization(file_name, show)
+image = imread(file_name);
 image_gray = rgb2gray(image);
 
-% Show original images 
-imshow(image_gray);
-figure; 
-histogram(image_gray);
+if show 
+    % Show original images 
+    imshow(image_gray);
+    figure; 
+    histogram(image_gray);    
+end
 
 % Equalization 
-max_gray = max(image_gray(:));
-range_gray = zeros(1, max_gray + 1); 
+MAX_GRAY = 256; 
+hist = zeros(1, MAX_GRAY); 
 [w, h] = size(image_gray); 
 
+% Histogram
 for i = 1:w
     for j = 1:h
-        range_gray( image_gray(i,j) + 1) = range_gray( image_gray(i,j) + 1) + 1;      
+        hist( image_gray(i,j) + 1) = hist( image_gray(i,j) + 1) + 1;      
     end
 end
 
-pk = zeros(length(range_gray),1);
-for i = 1:length(range_gray)
-    pk(i) = range_gray(i)/(w*h); 
+% New Shades of gray
+new_gray_level = zeros(MAX_GRAY, 1);
+current = 0;
+for i = 1:MAX_GRAY
+    current = current + hist(i);
+    new_gray_level(i) = floor( (current * MAX_GRAY) / (w*h) ); 
 end
 
-cdf = zeros(length(pk),1); 
-cdf(1) = pk(1); 
-for i = 2:length(pk)
-    cdf(i) = cdf(i-1) + pk(i); 
-end
-
-new_range_gray = zeros(1, max_gray + 1); 
-for i = 1:length(new_range_gray)
-    new_range_gray(i) = floor((i-1) * cdf(i)); 
-end
-
+% Create new image Equalized
 new_image = image_gray; 
 for i = 1:w
     for j = 1:h
         index = new_image(i,j) + 1; 
-        new_image(i,j) = new_range_gray(index);
+        new_image(i,j) = new_gray_level(index);
     end
 end
 
-% Show new image 
-figure; 
-imshow(new_image);
-figure; 
-histogram(new_image);
+if show
+    % Show new image 
+    figure; 
+    imshow(new_image);
+    figure; 
+    histogram(new_image);
+end
