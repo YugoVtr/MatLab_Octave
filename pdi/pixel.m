@@ -1,4 +1,4 @@
-a = imread('lena.jpg');
+a = imread('images/lena.jpg');
 a = rgb2gray(a);
 
 [w,h] = size(a);

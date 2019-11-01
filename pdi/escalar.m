@@ -1,4 +1,4 @@
-a = imread('lena.jpg');
+a = imread('images/lena.jpg');
 b = rgb2gray(a);
 
 c = b * 2; 
@@ -12,7 +12,7 @@ for i = 1:w
     for j = 1:h
         if image(i,j) > max
             max = image(i,j);
-        end; 
+        end
         if image(i,j) < min
             min = image(i,j);
         end

@@ -1,4 +1,4 @@
-a = imread('lena.jpg');
+a = imread('images/lena.jpg');
 b = rgb2gray(a);
 imshow(a); 
 figure; 
